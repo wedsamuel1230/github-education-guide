@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Copilot & MCP 伺服器完整指南</title>
+    <title>GitHub Copilot, JetBrains & MCP Servers | 完全指南 / Complete Guide</title>
     
     <!-- Google Fonts: Noto Sans TC for Traditional Chinese -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +45,14 @@
     </script>
 
     <style>
+        /* Theme base */
+        body.light { background-color:#ffffff; color:#1f2328; }
+        body.light .bg-github-darker, body.light .bg-github-dark, body.light .bg-github-card { background-color:#ffffff !important; }
+        body.light .border-github-border { border-color:#d0d7de !important; }
+        body.light .text-github-gray { color:#57606a !important; }
+        body.light .gradient-text { background:linear-gradient(to right,#0969da,#8250df); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        body.light nav { background:rgba(255,255,255,0.85) !important; }
+        body.light .shadow-lg { box-shadow:0 4px 12px rgba(0,0,0,0.08) !important; }
         body {
             background-color: #0d1117;
             color: #c9d1d9;
@@ -115,13 +123,18 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
                     <i data-lucide="terminal" class="text-github-blue w-6 h-6"></i>
-                    <span class="font-bold text-lg">Copilot & MCP <span class="text-github-gray text-sm font-normal ml-1">新手指南</span></span>
+                    <span class="font-bold text-lg">Copilot, JetBrains & MCP <span class="text-github-gray text-sm font-normal ml-1">新手指南</span></span>
                 </div>
-                <div class="hidden md:flex space-x-8 text-sm font-medium">
-                    <a href="#student" class="hover:text-github-blue transition">學生申請</a>
-                    <a href="#basics" class="hover:text-github-blue transition">Copilot 基礎</a>
-                    <a href="#mcp" class="hover:text-github-blue transition">MCP 伺服器</a>
-                    <a href="#prompts" class="hover:text-github-blue transition">提示語工程</a>
+                <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#student" data-i18n="nav.student" class="hover:text-github-blue transition">學生申請</a>
+                    <a href="#basics" data-i18n="nav.basics" class="hover:text-github-blue transition">Copilot 基礎</a>
+                    <a href="#mcp" data-i18n="nav.mcp" class="hover:text-github-blue transition">MCP 伺服器</a>
+                    <a href="#prompts" data-i18n="nav.prompts" class="hover:text-github-blue transition">提示語工程</a>
+                    <a href="#jetbrains" data-i18n="nav.jetbrains" class="hover:text-github-blue transition">JetBrains 工具</a>
+                    <div class="flex items-center gap-2 pl-4 border-l border-github-border">
+                        <button id="langToggle" class="px-3 py-1 rounded-md bg-github-card border border-github-border hover:border-github-blue transition text-xs">EN</button>
+                        <button id="themeToggle" class="px-3 py-1 rounded-md bg-github-card border border-github-border hover:border-github-purple transition text-xs" aria-pressed="false">Light</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,19 +152,22 @@
                 </span>
                 學生可免費申請教育版許可證
             </div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                GitHub Copilot & <br class="hidden md:block" />
-                <span class="gradient-text">MCP 伺服器</span> 完全指南
+            <h1 data-i18n="title.hero" class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                GitHub Copilot <br class="hidden md:block" />
+                <span class="gradient-text">,JetBrains & MCP 伺服器</span> 完全指南
             </h1>
             <p class="text-xl text-github-gray mb-10 max-w-2xl mx-auto">
-                從零開始掌握 AI 輔助編程。解鎖無限次數的代碼補全與智能對話，利用 MCP 連接外部數據，成為高效開發者。
+                <span data-i18n="hero.subtitle">從零開始掌握 AI 輔助編程。解鎖無限次數的代碼補全與智能對話，利用 MCP 連接外部數據，成為高效開發者。</span>
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#student" class="px-8 py-3 bg-github-green hover:bg-github-green/90 text-white rounded-lg font-medium transition flex items-center justify-center gap-2">
+                <a href="#student" class="px-8 py-3 bg-github-green hover:bg-github-green/90 text-white rounded-lg font-medium transition flex items-center justify-center gap-2" data-i18n="btn.student">
                     <i data-lucide="graduation-cap" class="w-5 h-5"></i> 我是學生，如何申請？
                 </a>
-                <a href="#basics" class="px-8 py-3 bg-github-card border border-github-border hover:border-github-gray/50 text-white rounded-lg font-medium transition">
+                <a href="#basics" class="px-8 py-3 bg-github-card border border-github-border hover:border-github-gray/50 text-white rounded-lg font-medium transition" data-i18n="btn.learn">
                     開始學習 Copilot
+                </a>
+                <a href="#jetbrains" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-lg font-medium transition flex items-center justify-center gap-2" data-i18n="btn.jetbrains">
+                    <i data-lucide="code-2" class="w-5 h-5"></i> 開始學習 JetBrains
                 </a>
             </div>
         </header>
@@ -263,7 +279,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-lg">填寫申請表第一頁</h4>
-                            <p class="text-github-gray mt-1">訪問 <a href="https://github.com/education" target="_blank" class="text-github-blue hover:underline">github.com/education</a> 點擊 "Join GitHub Education"：</p>
+                            <p class="text-github-gray mt-1">訪問 <a href="https://github.com/education" target="_blank" rel="noopener noreferrer" class="text-github-blue hover:underline">github.com/education</a> 點擊 "Join GitHub Education"：</p>
                             <ul class="list-disc list-inside text-sm text-github-gray mt-2 space-y-2">
                                 <li>郵箱： 必須選擇您的 VTC 學生郵箱 (edu.hk)。</li>
                                 <li>學校名稱： 填寫完整英文名稱，例如：Vocational Training Council,Hong Kong (不要填縮寫 VTC)。</li>
@@ -311,6 +327,125 @@
                         <div>
                             <h4 class="font-bold text-lg">提交申請與靜候佳音</h4>
                             <p class="text-github-gray mt-1">點擊綠色 "Process my application" 按鈕提交。您將會收到一封確認郵件，審核結果通常在 3-7 個工作日內發送到您的郵箱。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Student Pack FAQ -->
+            <div class="mt-16 bg-github-card border border-github-border rounded-2xl p-8">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <i data-lucide="help-circle" class="w-6 h-6 text-github-blue"></i>
+                    GitHub Student Pack 常見問題
+                </h3>
+                <div class="space-y-4" id="student-faq">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item border border-github-border rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center hover:bg-github-darker/50 transition rounded-lg" aria-expanded="false">
+                            <span class="font-medium text-github-blue">為什麼我的申請被拒絕？</span>
+                            <span class="text-github-blue text-xl">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            <p class="mb-3 font-semibold text-white">常見拒絕原因：</p>
+                            <ul class="list-disc list-inside space-y-2 mb-3">
+                                <li><strong>學術證明文件不清晰：</strong>上傳的圖片日期或時間表不符合資格要求，或圖片模糊無法辨識。建議重新上傳清晰的學生證、成績單或其他含有明確日期的證明文件。</li>
+                                <li><strong>使用未驗證域名的學校郵箱：</strong>如果學校域名未經 GitHub 驗證，需額外提供學術證明（學生證、成績單等）。</li>
+                                <li><strong>學校郵箱政策寬鬆：</strong>某些學校在學生正式註冊繳費前就發放郵箱，這種情況需要額外證明文件。</li>
+                                <li><strong>學術郵箱已被使用：</strong>如果該郵箱已在另一個 GitHub 帳號申請過 Student Pack，無法重複使用。根據 GitHub 服務條款，不允許維護多個個人帳號。</li>
+                                <li><strong>不符合學生資格：</strong>非正式學習課程（除非參與 GitHub Campus Program）、即將畢業、或未滿 13 歲者不符資格。</li>
+                            </ul>
+                            <p class="text-xs text-github-gray/70 mt-3">💡 提示：如對學校域名有疑問，請聯繫學校 IT 部門協助聯絡 GitHub。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item border border-github-border rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center hover:bg-github-darker/50 transition rounded-lg" aria-expanded="false">
+                            <span class="font-medium text-github-blue">可以將折扣從一個帳號轉移到另一個帳號嗎？</span>
+                            <span class="text-github-blue text-xl">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            <p class="mb-2">不可以直接轉移。如果您有多個帳號，必須合併個人帳號。</p>
+                            <p class="mb-3"><strong>操作步驟：</strong></p>
+                            <ol class="list-decimal list-inside space-y-1 mb-3">
+                                <li>保留獲得折扣的帳號</li>
+                                <li>將所有電子郵件地址添加到保留帳號</li>
+                                <li>如需要可重新命名保留帳號</li>
+                                <li>合併其他帳號的貢獻歷史</li>
+                            </ol>
+                            <p class="text-xs text-github-gray/70">注意：根據 GitHub 服務條款，禁止維護多個個人帳號。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item border border-github-border rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center hover:bg-github-darker/50 transition rounded-lg" aria-expanded="false">
+                            <span class="font-medium text-github-blue">如何續期我的 GitHub Education 權限？</span>
+                            <span class="text-github-blue text-xl">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            <p class="mb-3">權限到期後，如果您仍符合資格，可以重新申請。注意：部分合作夥伴優惠無法續期，大多數限時優惠在您首次設置時開始計時。</p>
+                            <p class="mb-2 font-semibold text-white">續期步驟：</p>
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li>登入您的 GitHub 帳號</li>
+                                <li>前往 Education benefits settings</li>
+                                <li>在「GitHub Education」下點擊「Start an application」</li>
+                                <li>完成表單並提交申請</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item border border-github-border rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center hover:bg-github-darker/50 transition rounded-lg" aria-expanded="false">
+                            <span class="font-medium text-github-blue">申請需要多久才能獲得批准？</span>
+                            <span class="text-github-blue text-xl">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            <p class="mb-2">審核時間通常為 <strong>3-7 個工作日</strong>，但可能因以下因素而有所不同：</p>
+                            <ul class="list-disc list-inside space-y-1 mb-3">
+                                <li>申請高峰期（學期開始時）可能需要更長時間</li>
+                                <li>文件清晰度：清晰完整的文件可加快審核</li>
+                                <li>學校域名驗證狀態：已驗證域名通常審核更快</li>
+                            </ul>
+                            <p class="text-xs text-github-gray/70">💡 建議：在 GitHub Education 頁面隨時查看申請狀態。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 5 -->
+                    <div class="faq-item border border-github-border rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center hover:bg-github-darker/50 transition rounded-lg" aria-expanded="false">
+                            <span class="font-medium text-github-blue">被拒絕後可以重新申請嗎？</span>
+                            <span class="text-github-blue text-xl">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            <p class="mb-3">可以！被拒絕後您可以立即重新申請，但請先：</p>
+                            <ol class="list-decimal list-inside space-y-2 mb-3">
+                                <li><strong>仔細閱讀拒絕原因</strong> - GitHub 會在郵件中說明具體原因</li>
+                                <li><strong>準備更清晰的證明文件</strong> - 確保文件包含：學校名稱、您的姓名、明確的日期</li>
+                                <li><strong>確認 2FA 和帳單資訊完整</strong> - 這些是必須條件</li>
+                                <li><strong>使用正確的設備和網路</strong> - 關閉 VPN，使用學校網路或手機拍攝文件</li>
+                            </ol>
+                            <p class="text-xs text-github-gray/70">⚠️ 重要：每次申請都會被審核，不會因為重複申請而被標記。</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 6 -->
+                    <div class="faq-item border border-github-border rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center hover:bg-github-darker/50 transition rounded-lg" aria-expanded="false">
+                            <span class="font-medium text-github-blue">Student Pack 包含哪些主要福利？</span>
+                            <span class="text-github-blue text-xl">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            <p class="mb-3">GitHub Student Developer Pack 包含超過 100 項開發者工具的免費訪問權限，主要包括：</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>GitHub Pro</strong> - 無限私有倉庫、進階協作工具</li>
+                                <li><strong>GitHub Copilot</strong> - AI 代碼補全與聊天（無限使用）</li>
+                                <li><strong>JetBrains</strong> - 所有專業 IDE 完整授權</li>
+                                <li><strong>域名與主機</strong> - 如 .me 域名、Heroku、DigitalOcean 額度</li>
+                                <li><strong>雲端服務</strong> - Azure、AWS 等雲端平台額度</li>
+                            </ul>
+                            <p class="mt-3 text-xs text-github-gray/70">完整列表請見：<a href="https://education.github.com/pack" target="_blank" rel="noopener noreferrer" class="text-github-blue hover:underline">education.github.com/pack</a></p>
                         </div>
                     </div>
                 </div>
@@ -480,7 +615,7 @@
                         <div class="flex justify-between items-center mb-2">
                             <span class="font-mono text-gray-300">示例配置 & 用法</span>
                             <div class="flex gap-2">
-                                <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking" target="_blank" rel="noopener noreferrer" class="repo-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]">Repo</a>
+                                <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequential-thinking" target="_blank" rel="noopener noreferrer" class="repo-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]">Repo</a>
                                 <button class="copy-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]" data-copy-target="sequential-code">一鍵複製</button>
                             </div>
                         </div>
@@ -669,10 +804,10 @@
                                         <li>Context7 改善大型代碼庫跨檔案引用的解析與語境檢索。</li>
                                 </ul>
                                 <div class="flex flex-wrap gap-2 mt-4 text-xs">
-                                        <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Sequential Thinking</a>
-                                        <a href="https://github.com/upstash/context7" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Context7</a>
-                                        <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Filesystem MCP</a>
-                                        <a href="https://github.com/brave/brave-search-mcp-server" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Brave Search MCP</a>
+                                        <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequential-thinking" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Sequential Thinking</a>
+                                            <a href="https://github.com/upstash/context7" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Context7</a>
+                                            <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Filesystem MCP</a>
+                                            <a href="https://github.com/brave/brave-search-mcp-server" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Brave Search MCP</a>
                                 </div>
                         </div>
 
@@ -680,7 +815,7 @@
 
         </section>
         <div class="text-center mb-12">
-                        <a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-github-card border border-github-border hover:border-github-purple text-white rounded-lg transition group">
+                        <a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-github-card border border-github-border hover:border-github-purple text-white rounded-lg transition group">
                             <i data-lucide="github" class="w-5 h-5"></i>
                             <span>探索更多 MCP 伺服器 (Awesome MCP Servers)</span>
                             <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
@@ -759,33 +894,242 @@
                 </div>
             </div>
         </section>
-
-        <!-- FEATURE 3: Gemini Powered Prompt Refiner (REMOVED) -->
         
-        <!-- Quick 4S Tip (MOVED HERE) -->
-        <section class="bg-github-blue/10 border border-github-blue/20 rounded-xl p-8 text-center">
-            <h3 class="text-2xl font-bold mb-4">Copilot 專屬：4S 原則</h3>
-            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4 text-left">
-                <div class="p-4 bg-github-dark rounded border border-github-border">
-                    <strong class="text-github-blue block mb-1">Single</strong>
-                    <span class="text-sm text-github-gray">專注單一任務，不要試圖一次做完所有事。</span>
+        <!-- Section 5: NEW AI TOOLS (REMOVED) -->
+        <!-- JetBrains Developer Tools Section -->
+        <section id="jetbrains" class="mt-24 relative">
+            <!-- Hero -->
+            <div class="rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-fuchsia-600 p-[1px] shadow-lg shadow-purple-800/30">
+                <div class="rounded-2xl bg-github-darker/95 backdrop-blur-sm p-10">
+                    <div class="md:flex md:items-center md:justify-between gap-12">
+                        <div class="md:w-2/3">
+                            <h2 class="text-4xl font-extrabold tracking-tight mb-4"><span class="inline-block bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200">JetBrains Developer Tools</span> 學生完全解鎖 🚀</h2>
+                            <p class="text-github-gray text-lg leading-relaxed mb-6">透過 GitHub Student Pack，你可以免費使用專業級 JetBrains IDE（IntelliJ、PyCharm、WebStorm、GoLand 等）及 AI Assistant、Code With Me 共同編程等功能，加速學習、合作與職涯準備。</p>
+                            <div class="flex flex-wrap gap-3">
+                                <a href="https://www.jetbrains.com/community/education/#students" target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-medium shadow-md shadow-pink-900/40 transition">JetBrains 學生授權詳情</a>
+                                <a href="https://www.jetbrains.com/" target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-medium shadow-md shadow-fuchsia-900/40 transition">下載 IDE</a>
+                            </div>
+                        </div>
+                        <div class="md:w-1/3 mt-10 md:mt-0">
+                            <div class="bg-github-dark rounded-xl border border-purple-500/40 p-6 h-full flex flex-col justify-between">
+                                <h3 class="text-xl font-semibold mb-4 text-purple-300">核心優勢一覽</h3>
+                                <ul class="space-y-3 text-sm text-github-gray">
+                                    <li class="flex items-start gap-2"><span class="text-purple-400">◆</span> 全平台專業 IDE（Java、Kotlin、Python、JS、Go、C++、Data）。</li>
+                                    <li class="flex items-start gap-2"><span class="text-purple-400">◆</span> Code With Me 即時協作（端對端加密）。</li>
+                                    <li class="flex items-start gap-2"><span class="text-purple-400">◆</span> AI Assistant：補全、重構、解釋、生成測試。</li>
+                                    <li class="flex items-start gap-2"><span class="text-purple-400">◆</span> 深度語言分析：即時錯誤診斷與建議。</li>
+                                    <li class="flex items-start gap-2"><span class="text-purple-400">◆</span> 學生免費授權，可年度續期。</li>
+                                </ul>
+                                <p class="text-xs mt-6 text-github-gray/60">提示：將 JetBrains IDE 與 MCP / Copilot 搭配，可獲得多維度智能支援。</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-4 bg-github-dark rounded border border-github-border">
-                    <strong class="text-github-blue block mb-1">Specific</strong>
-                    <span class="text-sm text-github-gray">指令要具體，如「使用快速排序」而非「排序」。</span>
+            </div>
+
+            <!-- Benefits Grid -->
+            <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-github-dark border border-purple-500/30 rounded-xl p-6 flex flex-col">
+                    <h3 class="font-semibold text-purple-300 mb-2">專業級語言支援</h3>
+                    <p class="text-sm text-github-gray flex-1">IDE 內建語義分析、即時重構、安全提示與依賴管理，<span class="text-purple-400">遠超基礎語法高亮</span>。</p>
+                    <span class="text-xs text-github-gray/50 mt-4">IntelliJ 平台技術</span>
                 </div>
-                <div class="p-4 bg-github-dark rounded border border-github-border">
-                    <strong class="text-github-blue block mb-1">Short</strong>
-                    <span class="text-sm text-github-gray">保持提示語簡潔，避免冗長無關的描述。</span>
+                <div class="bg-github-dark border border-pink-500/30 rounded-xl p-6 flex flex-col">
+                    <h3 class="font-semibold text-pink-300 mb-2">協作效率提升</h3>
+                    <p class="text-sm text-github-gray flex-1">Code With Me 共享環境、權限控制、跟隨模式，適合 Pair Programming / 專題討論。</p>
+                    <span class="text-xs text-github-gray/50 mt-4">端對端安全連線</span>
                 </div>
-                <div class="p-4 bg-github-dark rounded border border-github-border">
-                    <strong class="text-github-blue block mb-1">Surround</strong>
-                    <span class="text-sm text-github-gray">打開相關文件，讓 Copilot 讀取上下文。</span>
+                <div class="bg-github-dark border border-fuchsia-500/30 rounded-xl p-6 flex flex-col">
+                    <h3 class="font-semibold text-fuchsia-300 mb-2">AI 驅動開發</h3>
+                    <p class="text-sm text-github-gray flex-1">AI Assistant 支援自然語言尋找 API、生成單元測試、解釋錯誤堆疊。</p>
+                    <span class="text-xs text-github-gray/50 mt-4">本地語境感知</span>
+                </div>
+                <div class="bg-github-dark border border-purple-500/30 rounded-xl p-6 flex flex-col">
+                    <h3 class="font-semibold text-purple-300 mb-2">職涯與競賽準備</h3>
+                    <p class="text-sm text-github-gray flex-1">熟悉 IntelliJ 生態，在企業面試、Kotlin/Java 黑客松、開源貢獻中具競爭力。</p>
+                    <span class="text-xs text-github-gray/50 mt-4">企業工具先行體驗</span>
+                </div>
+            </div>
+
+            <!-- Feature Spotlight: Code With Me -->
+            <div class="mt-24 lg:flex gap-12 items-start">
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-200">Code With Me：專題 / Pair Programming 核心利器</h3>
+                    <p class="text-github-gray leading-relaxed mb-6">直接分享 IDE Session，參與者有自己的游標、編輯權限控制、跟隨模式、語音/聊天整合。適合 Debug、架構審查、教學指導。與 VS Code Live Share 相比更貼近語言級能力（如重構、導航、型別推斷）。</p>
+                    <ul class="space-y-3 text-sm text-github-gray">
+                        <li class="flex gap-2"><span class="text-purple-400">●</span> 權限層級：View / Edit / Full（終端 & R/W）。</li>
+                        <li class="flex gap-2"><span class="text-purple-400">●</span> 跟隨模式：一鍵跟隨 Host 游標，適合教學。</li>
+                        <li class="flex gap-2"><span class="text-purple-400">●</span> 依賴感知：共享專案索引，減少重新分析時間。</li>
+                        <li class="flex gap-2"><span class="text-purple-400">●</span> 端對端加密：學術或公司專案更安全。</li>
+                        <li class="flex gap-2"><span class="text-purple-400">●</span> 與 AI Assistant 串接：協作過程中可直接詢問重構建議。</li>
+                    </ul>
+                </div>
+                <div class="lg:w-1/2 mt-12 lg:mt-0">
+                    <div class="overflow-x-auto bg-github-dark rounded-xl border border-purple-500/40">
+                        <table class="min-w-full text-sm">
+                            <thead class="bg-purple-900/40">
+                                <tr class="text-left">
+                                    <th scope="col" class="py-3 px-4 font-semibold text-purple-200">特性</th>
+                                    <th scope="col" class="py-3 px-4 font-semibold text-purple-200">Code With Me</th>
+                                    <th scope="col" class="py-3 px-4 font-semibold text-purple-200">VS Code Live Share</th>
+                                    <th scope="col" class="py-3 px-4 font-semibold text-purple-200">GitHub Codespaces</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-purple-800/40">
+                                <tr>
+                                    <td class="py-3 px-4">IDE 語言索引共享</td>
+                                    <td class="py-3 px-4 text-green-400">✔</td>
+                                    <td class="py-3 px-4 text-yellow-300">部分</td>
+                                    <td class="py-3 px-4 text-green-400">✔ (雲端環境)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4">端對端加密</td>
+                                    <td class="py-3 px-4 text-green-400">✔</td>
+                                    <td class="py-3 px-4 text-yellow-300">外掛設定</td>
+                                    <td class="py-3 px-4 text-yellow-300">依連線</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4">資源成本</td>
+                                    <td class="py-3 px-4 text-green-400">本地主機</td>
+                                    <td class="py-3 px-4 text-green-400">本地/遠端</td>
+                                    <td class="py-3 px-4 text-red-400">雲端點數</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4">適合課堂教學</td>
+                                    <td class="py-3 px-4 text-green-400">高</td>
+                                    <td class="py-3 px-4 text-green-400">高</td>
+                                    <td class="py-3 px-4 text-yellow-300">中</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4">AI 功能整合</td>
+                                    <td class="py-3 px-4 text-green-400">IDE 原生</td>
+                                    <td class="py-3 px-4 text-yellow-300">外掛</td>
+                                    <td class="py-3 px-4 text-green-400">Copilot / Models</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-github-gray/50 mt-3">說明：表格為常見教學/協作場景主觀比較，實際最佳選項視課程需求而定。</p>
+                </div>
+            </div>
+
+            <!-- Activation Timeline -->
+            <div class="mt-24">
+                <h3 class="text-2xl font-bold mb-6 text-pink-200">學生啟用流程</h3>
+                <ol class="space-y-4 relative">
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">1</span>
+                        申請 <a href="#student" class="text-purple-300 underline">GitHub Student Pack</a>（確保學校 Email、2FA 已啟用）。
+                    </li>
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">2</span>
+                        等候審核（通常數小時～數天）。可於 GitHub Education 頁面查看狀態。
+                    </li>
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">3</span>
+                        收到核准後，前往 JetBrains 教育頁綁定帳號（使用同 Email）。
+                    </li>
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">4</span>
+                        下載所需 IDE：IntelliJ / PyCharm / WebStorm / GoLand / DataSpell 等。
+                    </li>
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">5</span>
+                        登入 IDE，授權同步；在 <code class="px-1 py-0.5 bg-github-dark rounded">Settings &gt; Plugins</code> 檢查 AI Assistant 是否已啟用。
+                    </li>
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">6</span>
+                        啟動 Code With Me（分享連結給同學），設定協作權限等級與語音通道。
+                    </li>
+                    <li class="pl-10">
+                        <span class="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">7</span>
+                        搭配本頁 MCP / Prompt Engineering 內容提升協作與 AI 使用效率。
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Use Cases -->
+            <div class="mt-24">
+                <h3 class="text-2xl font-bold mb-6 text-fuchsia-200">典型學生場景</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-github-dark rounded-xl border border-fuchsia-600/40 p-5 flex flex-col">
+                        <h4 class="font-semibold mb-2 text-fuchsia-300">課程專題</h4>
+                        <p class="text-sm text-github-gray flex-1">統一 IDE 設定與風格，減少跨工具摩擦；重構與測試自動化加速迭代。</p>
+                        <span class="text-xs text-github-gray/50 mt-3">架構一致性</span>
+                    </div>
+                    <div class="bg-github-dark rounded-xl border border-purple-600/40 p-5 flex flex-col">
+                        <h4 class="font-semibold mb-2 text-purple-300">學習小組</h4>
+                        <p class="text-sm text-github-gray flex-1">以 Code With Me 進行題解、共同 Debug、互相講解程式結構。</p>
+                        <span class="text-xs text-github-gray/50 mt-3">知識交換</span>
+                    </div>
+                    <div class="bg-github-dark rounded-xl border border-pink-600/40 p-5 flex flex-col">
+                        <h4 class="font-semibold mb-2 text-pink-300">Hackathon / 比賽</h4>
+                        <p class="text-sm text-github-gray flex-1">AI Assistant 快速產生測試樣例 & 原型程式碼，減少樣板撰寫時間。</p>
+                        <span class="text-xs text-github-gray/50 mt-3">快速原型</span>
+                    </div>
+                    <div class="bg-github-dark rounded-xl border border-purple-600/40 p-5 flex flex-col">
+                        <h4 class="font-semibold mb-2 text-purple-300">面試準備</h4>
+                        <p class="text-sm text-github-gray flex-1">在 IntelliJ 中練習企業常見技術棧（Spring、Gradle、微服務）。</p>
+                        <span class="text-xs text-github-gray/50 mt-3">產業對齊</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Accordion -->
+            <div class="mt-24">
+                <h3 class="text-2xl font-bold mb-6 text-pink-200">常見問題 FAQ</h3>
+                <div class="space-y-4" id="jetbrains-faq">
+                    <div class="faq-item border border-purple-600/40 rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center" aria-expanded="false">
+                            <span class="font-medium text-purple-200">學生授權多久有效？是否可續期？</span>
+                            <span class="text-purple-300">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            初次授權通常為 1 年，到期前可重新驗證學生身份續期；畢業後需轉為個人或商業授權（有折扣）。
+                        </div>
+                    </div>
+                    <div class="faq-item border border-purple-600/40 rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center" aria-expanded="false">
+                            <span class="font-medium text-purple-200">AI Assistant 會傳送全部程式碼到雲端嗎？</span>
+                            <span class="text-purple-300">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            僅在生成或解釋需求時傳遞必要上下文片段，並遵守隱私政策；敏感程式可手動限制查詢內容（建議審閱輸出）。
+                        </div>
+                    </div>
+                    <div class="faq-item border border-purple-600/40 rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center" aria-expanded="false">
+                            <span class="font-medium text-purple-200">Code With Me 與 VS Code Live Share 差異？</span>
+                            <span class="text-purple-300">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            Code With Me 深度整合 JetBrains 語言索引 / 重構能力；Live Share 輕量、啟動快。教學或大型專案審查偏向前者，快速腦力激盪可選後者。
+                        </div>
+                    </div>
+                    <div class="faq-item border border-purple-600/40 rounded-lg">
+                        <button class="faq-btn w-full text-left px-5 py-4 flex justify-between items-center" aria-expanded="false">
+                            <span class="font-medium text-purple-200">需要多個 IDE 會很佔資源嗎？</span>
+                            <span class="text-purple-300">＋</span>
+                        </button>
+                        <div class="faq-panel px-5 pb-5 hidden text-sm text-github-gray">
+                            建議集中使用 IntelliJ Ultimate + 專案模組化；利用 <code class="px-1 py-0.5 bg-github-dark rounded">Shared Indexes</code> 及關閉不必要外掛；同時配合 VS Code 作為輕量快速編輯器。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cross Link / CTA Footer -->
+            <div class="mt-24 bg-github-dark/60 border border-purple-700/40 rounded-xl p-10">
+                <h3 class="text-2xl font-bold mb-4 text-purple-200">整合你的學習武器庫</h3>
+                <p class="text-github-gray mb-6">JetBrains IDE + GitHub Copilot + MCP Servers + Prompt Engineering = <span class="text-purple-300">多層智能支援</span>。現在就完成授權並啟動你的專案迭代。</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="https://education.github.com/pack" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium shadow">取得 GitHub Student Pack</a>
+                    <a href="https://www.jetbrains.com/community/education/#students" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-medium shadow">啟用 JetBrains 學生授權</a>
+                    <a href="https://www.jetbrains.com/idea/download" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-medium shadow">下載 IntelliJ</a>
+                    <a href="https://www.jetbrains.com/help/idea/code-with-me.html" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg bg-purple-700 hover:bg-purple-600 text-white font-medium shadow">Code With Me 教學</a>
                 </div>
             </div>
         </section>
-
-        <!-- Section 5: NEW AI TOOLS (REMOVED) -->
         
     </main>
 
@@ -795,12 +1139,11 @@
                 掌握工具只是開始，持續構建才是關鍵。
             </p>
             <div class="flex justify-center gap-6 text-sm font-medium">
-                <a href="https://github.com/education" target="_blank" class="text-github-blue hover:underline">GitHub Education</a>
-                <a href="https://modelcontextprotocol.io/" target="_blank" class="text-github-blue hover:underline">MCP 官方文檔</a>
-                <a href="https://code.visualstudio.com/" target="_blank" class="text-github-blue hover:underline">VS Code 下載</a>
+                <a href="https://github.com/education" target="_blank" rel="noopener noreferrer" class="text-github-blue hover:underline">GitHub Education</a>
+                <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer" class="text-github-blue hover:underline">MCP 官方文檔</a>
+                <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer" class="text-github-blue hover:underline">VS Code 下載</a>
             </div>
             <p class="mt-8 text-xs text-github-gray/50">
-                Generated based on GitHub Copilot & MCP Server Complete Beginner's Guide.
             </p>
         </div>
     </footer>
@@ -849,6 +1192,68 @@
 <script>
 // MCP Card toggle & copy functionality
 document.addEventListener('DOMContentLoaded', () => {
+    // i18n dictionaries
+    const i18n = {
+        zh: {
+            'title.hero': 'GitHub Copilot, JetBrains & <br class="hidden md:block" /><span class="gradient-text">MCP 伺服器</span> 新手指南',
+            'hero.subtitle': '從零開始掌握 AI 輔助編程。解鎖無限次數的代碼補全與智能對話，利用 MCP 連接外部數據，成為高效開發者。',
+            'btn.student': '我是學生，如何申請？',
+            'btn.learn': '開始學習 Copilot',
+            'btn.jetbrains': '開始學習 JetBrains',
+            'nav.student': '學生申請',
+            'nav.basics': 'Copilot 基礎',
+            'nav.mcp': 'MCP 伺服器',
+            'nav.prompts': '提示語工程',
+            'nav.jetbrains': 'JetBrains 工具'
+        },
+        en: {
+            'title.hero': 'GitHub Copilot, JetBrains & <br class="hidden md:block" /><span class="gradient-text">MCP Servers</span> Beginner\'s Guide',
+            'hero.subtitle': 'Master AI-assisted coding from zero. Unlock unlimited code completions and intelligent chat, connect external data through MCP, and become a high‑efficiency developer.',
+            'btn.student': 'I am a student – how to apply?',
+            'btn.learn': 'Start with Copilot',
+            'btn.jetbrains': 'Start with JetBrains',
+            'nav.student': 'Student Apply',
+            'nav.basics': 'Copilot Basics',
+            'nav.mcp': 'MCP Servers',
+            'nav.prompts': 'Prompt Engineering',
+            'nav.jetbrains': 'JetBrains Tools'
+        }
+    };
+
+    let currentLang = 'zh';
+    function applyTranslations(){
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const val = i18n[currentLang][key];
+            if(!val) return;
+            if(key === 'title.hero') {
+                el.innerHTML = val; // preserve gradient span
+            } else {
+                el.textContent = val;
+            }
+        });
+    }
+    const langBtn = document.getElementById('langToggle');
+    if(langBtn){
+        langBtn.addEventListener('click', ()=>{
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            langBtn.textContent = currentLang === 'zh' ? 'EN' : '中文';
+            applyTranslations();
+        });
+    }
+    applyTranslations();
+
+    // Theme toggle logic
+    const themeBtn = document.getElementById('themeToggle');
+    if(themeBtn){
+        themeBtn.addEventListener('click', ()=>{
+            const body = document.body;
+            const light = body.classList.toggle('light');
+            themeBtn.textContent = light ? 'Dark' : 'Light';
+            themeBtn.setAttribute('aria-pressed', light ? 'true' : 'false');
+        });
+    }
+
     const cards = document.querySelectorAll('.mcp-card');
     cards.forEach(card => {
         card.addEventListener('click', (e) => {
@@ -881,6 +1286,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.textContent = '失敗';
                 setTimeout(() => btn.textContent = '一鍵複製', 1200);
             });
+        });
+    });
+
+    // FAQ Accordion toggle (both student and jetbrains sections)
+    const faqButtons = document.querySelectorAll('#jetbrains-faq .faq-btn, #student-faq .faq-btn');
+    faqButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const panel = btn.parentElement.querySelector('.faq-panel');
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', String(!expanded));
+            panel.classList.toggle('hidden');
+            const symbol = btn.querySelector('span:last-child');
+            if (symbol) symbol.textContent = expanded ? '＋' : '－';
         });
     });
 });
