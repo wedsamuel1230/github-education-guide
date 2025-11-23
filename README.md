@@ -5,7 +5,7 @@
 
 > 從零開始掌握 AI 輔助編程。解鎖無限次數的代碼補全與智能對話，利用 MCP 連接外部數據，成為高效開發者。
 
-[🌐 在線預覽](https://wedsamuel1230.github.io/copilot-mcp-guide/) | [📖 開始學習](#features)
+[🌐 在線預覽](https://wedsamuel1230.github.io/copilot-mcp-guide/) | 
 
 ## 📋 目錄
 
