@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Copilot & MCP 伺服器完整指南</title>
+    
+    <!-- Google Fonts: Noto Sans TC for Traditional Chinese -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        github: {
+                            dark: '#0d1117',
+                            darker: '#010409',
+                            border: '#30363d',
+                            blue: '#58a6ff',
+                            green: '#2ea043',
+                            purple: '#8957e5',
+                            gray: '#8b949e',
+                            card: '#161b22'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .glass-panel {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #30363d;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #58a6ff, #8957e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1117; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b949e; 
+        }
+        .kbd {
+            display: inline-block;
+            padding: 3px 6px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 12px;
+            line-height: 12px;
+            color: #c9d1d9;
+            vertical-align: middle;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            box-shadow: inset 0 -1px 0 #30363d;
+        }
+        /* Markdown Styling for Dynamic Content */
+        .markdown-body h1, .markdown-body h2 { font-size: 1.5em; font-weight: 700; margin-top: 1em; margin-bottom: 0.5em; color: #fff; }
+        .markdown-body h3 { font-size: 1.25em; font-weight: 600; margin-top: 1em; margin-bottom: 0.5em; color: #58a6ff; }
+        .markdown-body h4 { font-weight: 600; margin-top: 0.8em; margin-bottom: 0.4em; color: #c9d1d9; }
+        .markdown-body ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .markdown-body li { margin-bottom: 0.3em; }
+        .markdown-body p { margin-bottom: 1em; }
+        .markdown-body strong { color: #58a6ff; }
+        .markdown-body pre { background-color: #161b22; padding: 1em; border-radius: 6px; overflow-x: auto; border: 1px solid #30363d; margin-bottom: 1em; }
+        .markdown-body code { font-family: 'JetBrains Mono', monospace; background-color: rgba(110,118,129,0.4); padding: 0.2em 0.4em; border-radius: 3px; font-size: 85%; }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-github-blue selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 bg-github-darker/90 backdrop-blur border-b border-github-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="terminal" class="text-github-blue w-6 h-6"></i>
+                    <span class="font-bold text-lg">Copilot & MCP <span class="text-github-gray text-sm font-normal ml-1">新手指南</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#student" class="hover:text-github-blue transition">學生申請</a>
+                    <a href="#basics" class="hover:text-github-blue transition">Copilot 基礎</a>
+                    <a href="#mcp" class="hover:text-github-blue transition">MCP 伺服器</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 px-4 text-center bg-gradient-to-b from-github-darker to-github-dark relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[800px] h-[400px] bg-github-blue/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-github-green/10 text-github-green border border-github-green/20 text-sm mb-6">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-github-green opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-github-green"></span>
+                </span>
+                學生可免費申請教育版許可證
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                GitHub Copilot & <br class="hidden md:block" />
+                <span class="gradient-text">MCP 伺服器</span> 完全指南
+            </h1>
+            <p class="text-xl text-github-gray mb-10 max-w-2xl mx-auto">
+                從零開始掌握 AI 輔助編程。解鎖無限次數的代碼補全與智能對話，利用 MCP 連接外部數據，成為高效開發者。
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#student" class="px-8 py-3 bg-github-green hover:bg-github-green/90 text-white rounded-lg font-medium transition flex items-center justify-center gap-2">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i> 我是學生，如何申請？
+                </a>
+                <a href="#basics" class="px-8 py-3 bg-github-card border border-github-border hover:border-github-gray/50 text-white rounded-lg font-medium transition">
+                    開始學習 Copilot
+                </a>
+            </div>
+        </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-32">
+
+        <!-- Section 1: Student Application -->
+        <section id="student" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">🏆 學生免費申請指南</h2>
+                <p class="text-github-gray">如果你在教育機構就讀，千萬不要錯過這份價值 $10/月 的禮物。</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <!-- Benefit Cards -->
+                <div class="bg-github-card border border-github-border p-6 rounded-xl">
+                    <i data-lucide="credit-card" class="text-github-purple w-8 h-8 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2">完全免費</h3>
+                    <p class="text-github-gray text-sm">無需綁定信用卡，無需付費，驗證通過即刻享受完整功能。</p>
+                </div>
+                <div class="bg-github-card border border-github-border p-6 rounded-xl">
+                    <i data-lucide="infinity" class="text-github-blue w-8 h-8 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2">無限使用</h3>
+                    <p class="text-github-gray text-sm">聊天互動、高級請求 (GPT-4o / Claude) 均無次數限制。</p>
+                </div>
+                <div class="bg-github-card border border-github-border p-6 rounded-xl">
+                    <i data-lucide="calendar-check" class="text-github-green w-8 h-8 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2">有效期長</h3>
+                    <p class="text-github-gray text-sm">通常為期 2 年，期間只需維持學生身份即可續期。</p>
+                </div>
+            </div>
+
+            <!-- Steps Timeline (Updated for VTC/HK context) -->
+            <div class="bg-github-card border border-github-border rounded-2xl p-8 relative mb-8">
+                <h3 class="text-xl font-bold mb-8 border-b border-github-border pb-4">申請六步走 (以 VTC 為例)</h3>
+                
+                <!-- NEW WARNING -->
+                <div class="p-4 bg-red-800/20 border border-red-500/50 rounded-lg mb-6 text-sm text-red-300 flex items-start gap-3">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="text-red-300 block mb-1">重要提示：</strong> 申請全程禁止使用代理 (VPN) 並必須保持瀏覽器或設備的定位權限開啟。
+                        建議：盡量使用手機操作，並在學校網路環境或地理位置附近進行。
+                    </div>
+                </div>
+
+                <div class="space-y-8 relative step-connector pl-2">
+                    
+                    <!-- Step 1: 資格與文件準備 -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">1</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">資格確認與文件準備</h4>
+                            <div class="text-github-gray mt-1 space-y-2">
+                                <p>確認您年滿 13 歲並在 VTC 等教育機構就讀。在 GitHub 設定中，強制啟用雙因素認證 (2FA)。</p>
+                                <div class="bg-github-darker p-3 rounded-lg text-xs border border-github-border">
+                                    <h5 class="font-semibold text-white mb-1">準備文件 (四選一)：</h5>
+                                    <ul class="list-disc list-inside mt-1 space-y-1">
+                                        <li>學校發出的 `edu.hk` 郵箱地址（優先）。</li>
+                                        <li>有效的 VTC 學生證（正面及反面）。</li>
+                                        <li>帶有 VTC 名稱、您姓名及日期的在學證明文件。</li>
+                                        <li>VTC 錄取通知書（包含學校名稱、入學日期）。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: 完善 GitHub 個人資料 -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">2</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">完善 GitHub 個人資料</h4>
+                            <div class="bg-github-darker p-4 rounded-lg mt-2 text-sm border border-github-border">
+                                <p>前往 Settings > Public profile：</p>
+                                <ul class="list-disc list-inside mt-2 text-github-gray space-y-1">
+                                    <li>Name: 填寫真實姓名 (與證件一致)。</li>
+                                    <li>Bio/Company: 填寫學校英文全名，例如：Vocational Training Council, Hong Kong。</li>
+                                    <li>Location: 填寫城市，例如：Hong Kong, China。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: 填寫基本申請資訊 -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">3</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">填寫申請表第一頁</h4>
+                            <p class="text-github-gray mt-1">訪問 <a href="https://github.com/education" target="_blank" class="text-github-blue hover:underline">github.com/education</a> 點擊 "Get benefits"：</p>
+                            <ul class="list-disc list-inside text-sm text-github-gray mt-2 space-y-1">
+                                <li>郵箱： 優先選擇您的 VTC 學生郵箱 (edu.hk)。</li>
+                                <li>學校名稱： 填寫完整英文名稱，例如：Vocational Training Council,Hong Kong (不要填縮寫 VTC)。</li>
+                                <li>理由： 簡潔說明用途，如：`I want to learn coding and contribute to open source projects.`</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: 提交證明文件  -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">4</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">上傳證明文件 (建議手機操作)</h4>
+                            <p class="text-github-gray mt-1">GitHub 建議使用實時攝像頭拍攝您的文件 (例如學生證/在學證明)，以避免被系統標記為文件被修改而拒絕。</p>
+                            <ul class="list-disc list-inside text-sm text-github-gray mt-2 space-y-1">
+                                <li>在網頁上選擇 "Take a picture"。</li>
+                                <li>確保文件上的 學校名稱、您的姓名和日期 清晰可見。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: 填寫學校具體地址 -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">5</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">填寫 VTC 具體信息</h4>
+                            <p class="text-github-gray mt-1">填寫學校網站、辦學性質及地址（建議英文）：</p>
+                            <ul class="list-disc list-inside text-sm text-github-gray mt-2 space-y-1">
+                                <li>學校網站： 填寫官方網址 (如：`www.vtc.edu.hk`)。</li>
+                                <li>辦學性質： 選擇 Higher-education (高等教育)。</li>
+                                <li>地址： 填寫您的校區地址，Country 選擇 China，Non-US State 選擇 Hong Kong。</li>
+                                <li>*如果出現地圖，請在左下方搜索框輸入學校全名並選擇地址。*</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: 提交並等待 -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-green text-white flex items-center justify-center font-bold"><i data-lucide="check" class="w-4 h-4"></i></div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">提交申請與靜候佳音</h4>
+                            <p class="text-github-gray mt-1">點擊綠色 "Process my application" 按鈕提交。您將會收到一封確認郵件，審核結果通常在 3-7 個工作日內發送到您的郵箱。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURE 1: Bio Polisher (REMOVED) -->
+
+        </section>
+
+        <!-- Section 2: Basics & Setup -->
+        <section id="basics" class="scroll-mt-24">
+             <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6">🚀 Copilot 核心與安裝</h2>
+                    <p class="text-github-gray mb-6 leading-relaxed">
+                        GitHub Copilot 是你的 AI 結對工程師。它不僅能補全程式碼，還能解釋邏輯、生成測試、甚至幫你寫文檔。
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-github-card p-4 rounded-lg border border-github-border">
+                            <h4 class="font-bold flex items-center gap-2 mb-2">
+                                <i data-lucide="download" class="text-github-blue w-5 h-5"></i> 安裝步驟
+                            </h4>
+                            <ol class="list-decimal list-inside text-sm text-github-gray space-y-2">
+                                <li>下載並安裝 <strong>VS Code</strong>。</li>
+                                <li>在擴充功能 <span class="kbd">Ctrl+Shift+X</span> 搜尋 "GitHub Copilot"。</li>
+                                <li>安裝官方插件並登入 GitHub 授權。</li>
+                                <li>開啟檔案，享受 AI 輔助。</li>
+                            </ol>
+                        </div>
+
+                        <div class="bg-github-card p-4 rounded-lg border border-github-border">
+                            <h4 class="font-bold flex items-center gap-2 mb-2">
+                                <i data-lucide="keyboard" class="text-github-purple w-5 h-5"></i> 必備快捷鍵
+                            </h4>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="block text-github-gray text-xs mb-1">接受建議</span>
+                                    <span class="kbd">Tab</span>
+                                </div>
+                                <div>
+                                    <span class="block text-github-gray text-xs mb-1">打開對話框</span>
+                                    <span class="kbd">Ctrl + Enter</span>
+                                </div>
+                                <div>
+                                    <span class="block text-github-gray text-xs mb-1">觸發補全</span>
+                                    <span class="kbd">Ctrl + Space</span>
+                                </div>
+                                <div>
+                                    <span class="block text-github-gray text-xs mb-1">切換建議</span>
+                                    <span class="kbd">Alt + [</span> / <span class="kbd">]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Selection Guide -->
+                <div class="bg-gradient-to-br from-github-card to-github-darker p-6 rounded-2xl border border-github-border">
+                    <h3 class="text-xl font-bold mb-6">🧠 模型選擇與信用額度</h3>
+                    <div class="space-y-6">
+                        
+                        <!-- Model Item: Claude 4.5 Sonnet (Updated) -->
+                        <div class="relative">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-github-blue">Claude 4.5 Sonnet</span>
+                                <span class="text-xs px-2 py-1 rounded bg-github-blue/20 text-github-blue">1x Credit</span>
+                            </div>
+                            <p class="text-xs text-github-gray mb-2">強大性能、平衡型模型，適合複雜任務。</p>
+                            <div class="w-full bg-github-border h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-github-blue h-full w-3/4"></div>
+                            </div>
+                        </div>
+
+                        <!-- Model Item -->
+                        <div class="relative">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-github-purple">Claude Haiku 4.5</span>
+                                <span class="text-xs px-2 py-1 rounded bg-github-purple/20 text-github-purple">高CP值 (0.33x Credit)</span>
+                            </div>
+                            <p class="text-xs text-github-gray mb-2">日常開發首選，速度快且便宜。</p>
+                            <div class="w-full bg-github-border h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-github-purple h-full w-1/4"></div>
+                            </div>
+                        </div>
+
+                        <!-- Model Item -->
+                        <div class="relative">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-green-400">GPT-4o (0x)</span>
+                                <span class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">免費 (0x Credit)</span>
+                            </div>
+                            <p class="text-xs text-github-gray mb-2">簡單生成、快速編輯。不消耗額度。</p>
+                            <div class="w-full bg-github-border h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-green-500 h-full w-[5px]"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-github-dark p-4 rounded border border-github-border text-sm">
+                            <p class="font-bold text-white mb-1">💡 初學者策略：</p>
+                            <p class="text-github-gray">日常編程推薦使用 <span class="text-green-400">GPT-4o (0x)</span> 或 <span class="text-github-purple">Claude Haiku</span>。需要深度邏輯時使用 <span class="text-github-blue">Claude 4.5 Sonnet</span>。</p>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <!-- Section 3: MCP Servers -->
+        <section id="mcp" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">🔌 MCP：為 AI 裝上雙手</h2>
+                <p class="text-github-gray max-w-2xl mx-auto">
+                    Model Context Protocol (MCP) 是 Anthropic 推出的開放標準，讓 AI 不再只是聊天，而是能連接你的文件、數據庫和網絡。
+                </p>
+            </div>
+
+            <!-- Visualizing MCP Architecture -->
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-16 text-sm font-mono">
+                <div class="p-4 bg-github-card border border-github-blue/50 rounded-lg w-48 text-center shadow-[0_0_15px_rgba(88,166,255,0.1)]">
+                    <div class="font-bold text-github-blue">AI 應用 (Client)</div>
+                    <div class="text-xs text-github-gray mt-1">Claude / Copilot</div>
+                </div>
+                
+                <div class="flex flex-col items-center gap-1 text-github-gray">
+                    <i data-lucide="arrow-down" class="md:hidden w-4 h-4"></i>
+                    <i data-lucide="arrow-right" class="hidden md:block w-4 h-4"></i>
+                    <span class="text-xs">JSON-RPC</span>
+                </div>
+
+                <div class="p-4 bg-github-card border border-github-purple/50 rounded-lg w-48 text-center shadow-[0_0_15px_rgba(137,87,229,0.1)]">
+                    <div class="font-bold text-github-purple">MCP 伺服器</div>
+                    <div class="text-xs text-github-gray mt-1">功能邏輯層</div>
+                </div>
+
+                <div class="flex flex-col items-center gap-1 text-github-gray">
+                    <i data-lucide="arrow-down" class="md:hidden w-4 h-4"></i>
+                    <i data-lucide="arrow-right" class="hidden md:block w-4 h-4"></i>
+                    <span class="text-xs">存取</span>
+                </div>
+
+                <div class="p-4 bg-github-card border border-github-green/50 rounded-lg w-48 text-center shadow-[0_0_15px_rgba(46,160,67,0.1)]">
+                    <div class="font-bold text-github-green">外部數據源</div>
+                    <div class="text-xs text-github-gray mt-1">文件 / API / DB</div>
+                </div>
+            </div>
+            <!-- Diagram for MCP Architecture -->
+            
+
+            <!-- Recommended MCPs -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Card 1 -->
+                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                    <div class="flex justify-between items-start mb-4">
+                        <i data-lucide="brain-circuit" class="w-8 h-8 text-orange-400 group-hover:scale-110 transition"></i>
+                        <div class="flex text-yellow-500 text-xs gap-0.5">
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                        </div>
+                    </div>
+                    <h4 class="font-bold mb-2">Sequential Thinking</h4>
+                    <p class="text-sm text-github-gray mb-4">讓 AI 像資深架構師一樣進行深度、步驟化的思考，避免跳躍式結論。</p>
+                    <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">複雜邏輯必備</span>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                    <div class="flex justify-between items-start mb-4">
+                        <i data-lucide="file-code" class="w-8 h-8 text-blue-400 group-hover:scale-110 transition"></i>
+                        <div class="flex text-yellow-500 text-xs gap-0.5">
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                        </div>
+                    </div>
+                    <h4 class="font-bold mb-2">Context7</h4>
+                    <p class="text-sm text-github-gray mb-4">為 LLM 提供實時代碼文檔，優化上下文理解，減少 AI 幻覺。</p>
+                    <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">代碼理解增強</span>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                    <div class="flex justify-between items-start mb-4">
+                        <i data-lucide="hard-drive" class="w-8 h-8 text-green-400 group-hover:scale-110 transition"></i>
+                        <div class="flex text-yellow-500 text-xs gap-0.5">
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                        </div>
+                    </div>
+                    <h4 class="font-bold mb-2">Filesystem MCP</h4>
+                    <p class="text-sm text-github-gray mb-4">允許 AI 讀取和寫入本地文件系統，是代碼重構和分析的基礎工具。</p>
+                    <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">文件操作</span>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                    <div class="flex justify-between items-start mb-4">
+                        <i data-lucide="search" class="w-8 h-8 text-red-400 group-hover:scale-110 transition"></i>
+                        <div class="flex text-yellow-500 text-xs gap-0.5">
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                        </div>
+                    </div>
+                    <h4 class="font-bold mb-2">Brave Search</h4>
+                    <p class="text-sm text-github-gray mb-4">強大的網頁搜尋能力，支持本地搜尋，獲取最新技術文檔和解決方案。</p>
+                    <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">免費搜尋 API</span>
+                </div>
+            </div>
+
+            <!-- Awesome MCP Servers Link -->
+            <div class="text-center mb-12">
+                <a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-github-card border border-github-border hover:border-github-purple text-white rounded-lg transition group">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                    <span>探索更多 MCP 伺服器 (Awesome MCP Servers)</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- FEATURE 2: MCP Idea Lab (REMOVED) -->
+
+        </section>
+
+        <!-- Section 4: Prompt Engineering -->
+        <section id="prompts" class="scroll-mt-24">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6">✨ 提示語工程：PIRCAI 框架</h2>
+                    <p class="text-github-gray mb-6">
+                        好的提示語是讓 AI 產出高品質代碼的關鍵。請遵循 PIRCAI 框架來構建你的請求。
+                    </p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex gap-4">
+                            <div class="w-12 font-bold text-github-blue">P</div>
+                            <div>Profile (角色)：設定 AI 的身份（如：Python 專家）。</div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-12 font-bold text-github-blue">I</div>
+                            <div>Input (輸入)：提供背景信息和現有代碼。</div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-12 font-bold text-github-blue">R</div>
+                            <div>Request (請求)：清晰具體的動詞（修復、編寫、優化）。</div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-12 font-bold text-github-blue">C</div>
+                            <div>Constraints (約束)：技術棧、性能要求。</div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-12 font-bold text-github-blue">A</div>
+                            <div>Assistants (協助)：指定輸出格式（包含註釋、文檔）。</div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-12 font-bold text-github-blue">I</div>
+                            <div>Instructions (指令)：逐步說明步驟。</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Code Example Box -->
+                <div class="bg-[#0d1117] rounded-xl border border-github-border overflow-hidden flex flex-col">
+                    <div class="flex items-center justify-between px-4 py-2 bg-github-card border-b border-github-border">
+                        <span class="text-xs font-mono text-github-gray">Prompt Example</span>
+                        <button onclick="copyToClipboard()" class="text-xs flex items-center gap-1 hover:text-white text-github-gray transition">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                        </button>
+                    </div>
+                    <div class="p-4 font-mono text-sm overflow-x-auto text-gray-300 relative group">
+                        <pre id="promptCode"><span class="text-github-purple"># Profile</span>
+你是一位 Python 數據處理專家。
+
+<span class="text-github-purple"># Input</span>
+我有一個包含雜亂數據的 CSV 文件，其中包含 'price' 欄位（字符串格式，含貨幣符號）。
+
+<span class="text-github-purple"># Request</span>
+請編寫一個函數 `clean_price_data` 來清洗這些數據。
+
+<span class="text-github-purple"># Constraints</span>
+- 使用 Pandas 庫。
+- 必須處理空值（用 0 填充）。
+- 性能優先，使用向量化操作。
+
+<span class="text-github-purple"># AI Assistants</span>
+- 為函數添加 Google Style 的 Docstring。
+- 在關鍵邏輯處添加行內註釋。
+
+<span class="text-github-purple"># Instructions</span>
+1. 讀取數據。
+2. 清洗字符。
+3. 轉換類型。
+4. 返回處理後的 DataFrame。</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURE 3: Gemini Powered Prompt Refiner (REMOVED) -->
+        
+        <!-- Quick 4S Tip (MOVED HERE) -->
+        <section class="bg-github-blue/10 border border-github-blue/20 rounded-xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-4">Copilot 專屬：4S 原則</h3>
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4 text-left">
+                <div class="p-4 bg-github-dark rounded border border-github-border">
+                    <strong class="text-github-blue block mb-1">Single</strong>
+                    <span class="text-sm text-github-gray">專注單一任務，不要試圖一次做完所有事。</span>
+                </div>
+                <div class="p-4 bg-github-dark rounded border border-github-border">
+                    <strong class="text-github-blue block mb-1">Specific</strong>
+                    <span class="text-sm text-github-gray">指令要具體，如「使用快速排序」而非「排序」。</span>
+                </div>
+                <div class="p-4 bg-github-dark rounded border border-github-border">
+                    <strong class="text-github-blue block mb-1">Short</strong>
+                    <span class="text-sm text-github-gray">保持提示語簡潔，避免冗長無關的描述。</span>
+                </div>
+                <div class="p-4 bg-github-dark rounded border border-github-border">
+                    <strong class="text-github-blue block mb-1">Surround</strong>
+                    <span class="text-sm text-github-gray">打開相關文件，讓 Copilot 讀取上下文。</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: NEW AI TOOLS (REMOVED) -->
+        
+    </main>
+
+    <footer class="border-t border-github-border bg-github-darker py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-github-gray text-sm mb-4">
+                掌握工具只是開始，持續構建才是關鍵。
+            </p>
+            <div class="flex justify-center gap-6 text-sm font-medium">
+                <a href="https://github.com/education" target="_blank" class="text-github-blue hover:underline">GitHub Education</a>
+                <a href="https://modelcontextprotocol.io/" target="_blank" class="text-github-blue hover:underline">MCP 官方文檔</a>
+                <a href="https://code.visualstudio.com/" target="_blank" class="text-github-blue hover:underline">VS Code 下載</a>
+            </div>
+            <p class="mt-8 text-xs text-github-gray/50">
+                Generated based on GitHub Copilot & MCP Server Complete Beginner's Guide.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-github-green text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-[200]">
+        <i data-lucide="check-circle" class="w-4 h-4"></i>
+        <span id="toastMsg">已複製到剪貼簿！</span>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = msg;
+            toast.className = `fixed bottom-5 right-5 text-white px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 flex items-center gap-2 z-[200] ${isError ? 'bg-red-500' : 'bg-github-green'}`;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('promptCode').innerText;
+            // Use execCommand for broader compatibility within iframe environments
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            showToast("已複製到剪貼簿！");
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
