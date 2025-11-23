@@ -121,6 +121,7 @@
                     <a href="#student" class="hover:text-github-blue transition">學生申請</a>
                     <a href="#basics" class="hover:text-github-blue transition">Copilot 基礎</a>
                     <a href="#mcp" class="hover:text-github-blue transition">MCP 伺服器</a>
+                    <a href="#prompts" class="hover:text-github-blue transition">提示語工程</a>
                 </div>
             </div>
         </div>
@@ -161,7 +162,6 @@
         <section id="student" class="scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold mb-4">🏆 學生免費申請指南</h2>
-                <p class="text-github-gray">如果你在教育機構就讀，千萬不要錯過這份價值 $10/月 的禮物。</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 mb-12">
@@ -207,9 +207,9 @@
                             <h4 class="font-bold text-lg">資格確認與文件準備</h4>
                             <div class="text-github-gray mt-1 space-y-2">
                                 <p>確認您年滿 13 歲並在 VTC 等教育機構就讀。在 GitHub 設定中，強制啟用雙因素認證 (2FA)。</p>
-                                <div class="bg-github-darker p-3 rounded-lg text-xs border border-github-border">
+                                <div class="bg-github-darker p-4 rounded-lg text-sm border border-github-border">
                                     <h5 class="font-semibold text-white mb-1">準備文件 (四選一)：</h5>
-                                    <ul class="list-disc list-inside mt-1 space-y-1">
+                                    <ul class="list-disc list-inside mt-2 space-y-2">
                                         <li>學校發出的 `edu.hk` 郵箱地址（優先）。</li>
                                         <li>有效的 VTC 學生證（正面及反面）。</li>
                                         <li>帶有 VTC 名稱、您姓名及日期的在學證明文件。</li>
@@ -220,44 +220,61 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: 完善 GitHub 個人資料 -->
+                    <!-- Step 2: 啟用雙重驗證 (2FA) -->
                     <div class="relative flex gap-6">
                         <div class="flex-shrink-0 z-10 bg-github-card">
                             <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">2</div>
                         </div>
                         <div>
-                            <h4 class="font-bold text-lg">完善 GitHub 個人資料</h4>
+                            <h4 class="font-bold text-lg">設定 GitHub 雙重驗證 (Two-Factor Authentication)</h4>
                             <div class="bg-github-darker p-4 rounded-lg mt-2 text-sm border border-github-border">
-                                <p>前往 Settings > Public profile：</p>
+                                <p class="text-yellow-400 font-semibold mb-2">⚠️ 重要：申請前必須完成</p>
+                                <p>前往 Settings > Password and authentication > Two-factor authentication 啟用 2FA。</p>
                                 <ul class="list-disc list-inside mt-2 text-github-gray space-y-1">
-                                    <li>Name: 填寫真實姓名 (與證件一致)。</li>
-                                    <li>Bio/Company: 填寫學校英文全名，例如：Vocational Training Council, Hong Kong。</li>
-                                    <li>Location: 填寫城市，例如：Hong Kong, China。</li>
+                                    <li>可使用驗證器應用程式 (如 Google Authenticator、Microsoft Authenticator) 或 SMS。</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 3: 填寫基本申請資訊 -->
+                    <!-- Step 3: 完善帳單資訊 -->
                     <div class="relative flex gap-6">
                         <div class="flex-shrink-0 z-10 bg-github-card">
                             <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">3</div>
                         </div>
                         <div>
+                            <h4 class="font-bold text-lg">完善 GitHub 帳單資訊</h4>
+                            <div class="bg-github-darker p-4 rounded-lg mt-2 text-sm border border-github-border">
+                                <p class="text-yellow-400 font-semibold mb-2">⚠️ 重要：申請前必須完成</p>
+                                <p>前往 Settings > Billing and plans > Payment information：</p>
+                                <ul class="list-disc list-inside mt-2 text-github-gray space-y-1">
+                                    <li>填寫您的全名 (Full Name)，必須與證明文件上的姓名完全一致。</li>
+                                    <li>如果您只有單一法定姓名，請在名字 (First Name) 和姓氏 (Last Name) 欄位中均填入相同的名字。</li>
+                                    <li>無需新增付款方式 (Payment method)。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: 填寫基本申請資訊 -->
+                    <div class="relative flex gap-6">
+                        <div class="flex-shrink-0 z-10 bg-github-card">
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">4</div>
+                        </div>
+                        <div>
                             <h4 class="font-bold text-lg">填寫申請表第一頁</h4>
-                            <p class="text-github-gray mt-1">訪問 <a href="https://github.com/education" target="_blank" class="text-github-blue hover:underline">github.com/education</a> 點擊 "Get benefits"：</p>
-                            <ul class="list-disc list-inside text-sm text-github-gray mt-2 space-y-1">
-                                <li>郵箱： 優先選擇您的 VTC 學生郵箱 (edu.hk)。</li>
+                            <p class="text-github-gray mt-1">訪問 <a href="https://github.com/education" target="_blank" class="text-github-blue hover:underline">github.com/education</a> 點擊 "Join GitHub Education"：</p>
+                            <ul class="list-disc list-inside text-sm text-github-gray mt-2 space-y-2">
+                                <li>郵箱： 必須選擇您的 VTC 學生郵箱 (edu.hk)。</li>
                                 <li>學校名稱： 填寫完整英文名稱，例如：Vocational Training Council,Hong Kong (不要填縮寫 VTC)。</li>
-                                <li>理由： 簡潔說明用途，如：`I want to learn coding and contribute to open source projects.`</li>
                             </ul>
                         </div>
                     </div>
 
-                    <!-- Step 4: 提交證明文件  -->
+                    <!-- Step 5: 提交證明文件  -->
                     <div class="relative flex gap-6">
                         <div class="flex-shrink-0 z-10 bg-github-card">
-                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">4</div>
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">5</div>
                         </div>
                         <div>
                             <h4 class="font-bold text-lg">上傳證明文件 (建議手機操作)</h4>
@@ -269,10 +286,10 @@
                         </div>
                     </div>
 
-                    <!-- Step 5: 填寫學校具體地址 -->
+                    <!-- Step 6: 填寫學校具體地址 -->
                     <div class="relative flex gap-6">
                         <div class="flex-shrink-0 z-10 bg-github-card">
-                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">5</div>
+                            <div class="w-8 h-8 rounded-full bg-github-blue text-white flex items-center justify-center font-bold">6</div>
                         </div>
                         <div>
                             <h4 class="font-bold text-lg">填寫 VTC 具體信息</h4>
@@ -286,7 +303,7 @@
                         </div>
                     </div>
 
-                    <!-- Step 6: 提交並等待 -->
+                    <!-- Step 7: 提交並等待 -->
                     <div class="relative flex gap-6">
                         <div class="flex-shrink-0 z-10 bg-github-card">
                             <div class="w-8 h-8 rounded-full bg-github-green text-white flex items-center justify-center font-bold"><i data-lucide="check" class="w-4 h-4"></i></div>
@@ -443,9 +460,9 @@
             
 
             <!-- Recommended MCPs -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="flex flex-col gap-6 mb-12">
                 <!-- Card 1 -->
-                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                <div class="mcp-card bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group cursor-pointer" data-mcp="sequential" aria-expanded="false">
                     <div class="flex justify-between items-start mb-4">
                         <i data-lucide="brain-circuit" class="w-8 h-8 text-orange-400 group-hover:scale-110 transition"></i>
                         <div class="flex text-yellow-500 text-xs gap-0.5">
@@ -456,13 +473,35 @@
                             <i data-lucide="star" class="w-3 h-3 fill-current"></i>
                         </div>
                     </div>
-                    <h4 class="font-bold mb-2">Sequential Thinking</h4>
+                    <h4 class="font-bold mb-2 flex items-center gap-2">Sequential Thinking <span class="text-[10px] px-2 py-1 rounded bg-github-border text-gray-300">點擊展開</span></h4>
                     <p class="text-sm text-github-gray mb-4">讓 AI 像資深架構師一樣進行深度、步驟化的思考，避免跳躍式結論。</p>
                     <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">複雜邏輯必備</span>
+                    <div class="mcp-snippet hidden mt-4 text-xs">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-mono text-gray-300">示例配置 & 用法</span>
+                            <div class="flex gap-2">
+                                <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking" target="_blank" rel="noopener noreferrer" class="repo-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]">Repo</a>
+                                <button class="copy-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]" data-copy-target="sequential-code">一鍵複製</button>
+                            </div>
+                        </div>
+                                                <pre class="bg-github-darker border border-github-border rounded-lg p-3 overflow-x-auto"><code id="sequential-code" class="language-json">{
+    "servers": {
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        }
+    }
+}
+</code></pre>
+                        <div class="mt-2 text-[11px] text-github-gray italic">提示語建議："請分解問題並逐步給出推理，每一步驗證前一步假設。"</div>
+                    </div>
                 </div>
 
                 <!-- Card 2 -->
-                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                <div class="mcp-card bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group cursor-pointer" data-mcp="context7" aria-expanded="false">
                     <div class="flex justify-between items-start mb-4">
                         <i data-lucide="file-code" class="w-8 h-8 text-blue-400 group-hover:scale-110 transition"></i>
                         <div class="flex text-yellow-500 text-xs gap-0.5">
@@ -473,13 +512,35 @@
                             <i data-lucide="star" class="w-3 h-3 fill-current"></i>
                         </div>
                     </div>
-                    <h4 class="font-bold mb-2">Context7</h4>
+                    <h4 class="font-bold mb-2 flex items-center gap-2">Context7 <span class="text-[10px] px-2 py-1 rounded bg-github-border text-gray-300">點擊展開</span></h4>
                     <p class="text-sm text-github-gray mb-4">為 LLM 提供實時代碼文檔，優化上下文理解，減少 AI 幻覺。</p>
                     <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">代碼理解增強</span>
+                    <div class="mcp-snippet hidden mt-4 text-xs">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-mono text-gray-300">示例配置 & 查詢</span>
+                            <div class="flex gap-2">
+                                <a href="https://github.com/upstash/context7" target="_blank" rel="noopener noreferrer" class="repo-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]">Repo</a>
+                                <button class="copy-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]" data-copy-target="context7-code">一鍵複製</button>
+                            </div>
+                        </div>
+                                                <pre class="bg-github-darker border border-github-border rounded-lg p-3 overflow-x-auto"><code id="context7-code" class="language-json">{
+    "servers": {
+        "context7": {
+            "type": "http",
+            "url": "https://mcp.context7.com/mcp",
+            "headers": {
+                "CONTEXT7_API_KEY": "YOUR_API_KEY"
+            }
+        }
+    }
+}
+</code></pre>
+                        <div class="mt-2 text-[11px] text-github-gray italic">提示語建議："請引用相關檔案並附上行號來源。"</div>
+                    </div>
                 </div>
 
                 <!-- Card 3 -->
-                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                <div class="mcp-card bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group cursor-pointer" data-mcp="filesystem" aria-expanded="false">
                     <div class="flex justify-between items-start mb-4">
                         <i data-lucide="hard-drive" class="w-8 h-8 text-green-400 group-hover:scale-110 transition"></i>
                         <div class="flex text-yellow-500 text-xs gap-0.5">
@@ -490,13 +551,36 @@
                             <i data-lucide="star" class="w-3 h-3 fill-current"></i>
                         </div>
                     </div>
-                    <h4 class="font-bold mb-2">Filesystem MCP</h4>
-                    <p class="text-sm text-github-gray mb-4">允許 AI 讀取和寫入本地文件系統，是代碼重構和分析的基礎工具。</p>
-                    <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">文件操作</span>
+                                        <h4 class="font-bold mb-2 flex items-center gap-2">Filesystem MCP <span class="text-[10px] px-2 py-1 rounded bg-github-border text-gray-300">點擊展開</span></h4>
+                                        <p class="text-sm text-github-gray mb-4">允許 AI 讀取和寫入本地文件系統，是代碼重構和分析的基礎工具。</p>
+                                        <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">文件操作</span>
+                                        <div class="mcp-snippet hidden mt-4 text-xs">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <span class="font-mono text-gray-300">示例配置 & 使用</span>
+                                                    <div class="flex gap-2">
+                                                        <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem" target="_blank" rel="noopener noreferrer" class="repo-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]">Repo</a>
+                                                        <button class="copy-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]" data-copy-target="filesystem-code">一鍵複製</button>
+                                                    </div>
+                                                </div>
+                                                                                                <pre class="bg-github-darker border border-github-border rounded-lg p-3 overflow-x-auto"><code id="filesystem-code" class="language-json">{
+    "servers": {
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "${workspaceFolder}"
+            ]
+        }
+    }
+}
+</code></pre>
+                                        <div class="mt-2 text-[11px] text-github-gray italic">建議：限制工作區路徑，請求示例："列出 src 目錄並打開 index.js"。</div>
+                                        </div>
                 </div>
 
                 <!-- Card 4 -->
-                <div class="bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group">
+                                <div class="mcp-card bg-github-card border border-github-border p-5 rounded-xl hover:border-github-blue transition group cursor-pointer" data-mcp="brave" aria-expanded="false">
                     <div class="flex justify-between items-start mb-4">
                         <i data-lucide="search" class="w-8 h-8 text-red-400 group-hover:scale-110 transition"></i>
                         <div class="flex text-yellow-500 text-xs gap-0.5">
@@ -507,25 +591,101 @@
                             <i data-lucide="star" class="w-3 h-3 fill-current"></i>
                         </div>
                     </div>
-                    <h4 class="font-bold mb-2">Brave Search</h4>
-                    <p class="text-sm text-github-gray mb-4">強大的網頁搜尋能力，支持本地搜尋，獲取最新技術文檔和解決方案。</p>
-                    <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">免費搜尋 API</span>
+                                        <h4 class="font-bold mb-2 flex items-center gap-2">Brave Search <span class="text-[10px] px-2 py-1 rounded bg-github-border text-gray-300">點擊展開</span></h4>
+                                        <p class="text-sm text-github-gray mb-4">強大的網頁搜尋能力，支持本地搜尋，獲取最新技術文檔和解決方案。</p>
+                                        <span class="text-xs bg-github-border px-2 py-1 rounded text-gray-300">免費搜尋 API</span>
+                                        <div class="mcp-snippet hidden mt-4 text-xs">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <span class="font-mono text-gray-300">示例配置 & 查詢</span>
+                                                    <div class="flex gap-2">
+                                                        <a href="https://github.com/brave/brave-search-mcp-server" target="_blank" rel="noopener noreferrer" class="repo-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]">Repo</a>
+                                                        <button class="copy-btn px-2 py-1 rounded bg-github-blue/20 hover:bg-github-blue/40 text-github-blue text-[11px]" data-copy-target="brave-code">一鍵複製</button>
+                                                    </div>
+                                                </div>
+                                                                                                <pre class="bg-github-darker border border-github-border rounded-lg p-3 overflow-x-auto"><code id="brave-code" class="language-json">{
+    "inputs": [
+        {
+            "password": true,
+            "id": "brave-api-key",
+            "type": "promptString",
+            "description": "Brave Search API Key"
+        }
+    ],
+    "servers": {
+        "brave-search-mcp-server": {
+            "command": "npx",
+            "args": ["-y", "@brave/brave-search-mcp-server", "--transport", "stdio"],
+            "env": {
+                "BRAVE_API_KEY": "${input:brave-api-key}"
+            }
+        }
+    }
+}
+</code></pre>
+                                        <div class="mt-2 text-[11px] text-github-gray italic">使用示例："搜尋最新 Node.js LTS 版本釋出資訊"。</div>
+                                        </div>
                 </div>
             </div>
 
             <!-- Awesome MCP Servers Link -->
-            <div class="text-center mb-12">
-                <a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-github-card border border-github-border hover:border-github-purple text-white rounded-lg transition group">
-                    <i data-lucide="github" class="w-5 h-5"></i>
-                    <span>探索更多 MCP 伺服器 (Awesome MCP Servers)</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                </a>
-            </div>
+            
+
+                        <!-- Quick Configuration & Links for Recommended MCP Servers -->
+                        <div class="bg-github-darker border border-github-border/70 rounded-xl p-6 mb-12">
+                                <h3 class="font-bold text-xl mb-4 flex items-center gap-2"><i data-lucide="code-xml" class="w-5 h-5 text-github-blue"></i>快速配置示例</h3>
+                                <p class="text-github-gray text-sm mb-3">以下為在 VS Code / Copilot 中啟動多個 MCP 伺服器的統一配置範例 (概念性示例，依實際套件名稱調整)：</p>
+                                                                <pre class="text-xs overflow-x-auto bg-github-card border border-github-border rounded-lg p-4"><code class="language-json">{
+    "inputs": [
+        { "password": true, "id": "brave-api-key", "type": "promptString", "description": "Brave Search API Key" }
+    ],
+    "mcp": {
+        "servers": {
+            "context7": {
+                "type": "http",
+                "url": "https://mcp.context7.com/mcp",
+                "headers": { "CONTEXT7_API_KEY": "YOUR_API_KEY" }
+            }
+            "sequential-thinking": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+            },
+            "filesystem": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+            },
+            "brave-search-mcp-server": {
+                "command": "npx",
+                "args": ["-y", "@brave/brave-search-mcp-server", "--transport", "stdio"],
+                "env": { "BRAVE_API_KEY": "${input:brave-api-key}" }
+            }
+        }
+    }
+}</code></pre>
+                                <ul class="list-disc list-inside text-xs text-github-gray space-y-1 mt-3">
+                                        <li>先執行 <code>npm install</code> 或使用 <code>npx</code> 直接呼叫未全局安裝的套件。</li>
+                                        <li>Brave Search 需要申請免費 API Key 並放入環境變量 <code>BRAVE_API_KEY</code>。</li>
+                                        <li>Filesystem MCP 建議限制 <code>ROOT_PATH</code> 為專案根目錄以避免過度訪問。</li>
+                                        <li>Sequential Thinking 有助於長鏈式推理與架構決策，降低跳躍式回答。</li>
+                                        <li>Context7 改善大型代碼庫跨檔案引用的解析與語境檢索。</li>
+                                </ul>
+                                <div class="flex flex-wrap gap-2 mt-4 text-xs">
+                                        <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Sequential Thinking</a>
+                                        <a href="https://github.com/upstash/context7" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Context7</a>
+                                        <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Filesystem MCP</a>
+                                        <a href="https://github.com/brave/brave-search-mcp-server" target="_blank" class="px-3 py-1 rounded bg-github-card border border-github-border hover:border-github-blue">Brave Search MCP</a>
+                                </div>
+                        </div>
 
             <!-- FEATURE 2: MCP Idea Lab (REMOVED) -->
 
         </section>
-
+        <div class="text-center mb-12">
+                        <a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-github-card border border-github-border hover:border-github-purple text-white rounded-lg transition group">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                            <span>探索更多 MCP 伺服器 (Awesome MCP Servers)</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
         <!-- Section 4: Prompt Engineering -->
         <section id="prompts" class="scroll-mt-24">
             <div class="grid lg:grid-cols-2 gap-12">
@@ -686,4 +846,43 @@
         });
     </script>
 </body>
+<script>
+// MCP Card toggle & copy functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.mcp-card');
+    cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Avoid triggering when clicking action buttons (copy or repo link)
+            if (e.target.closest('.copy-btn, .repo-btn')) return;
+            const snippet = card.querySelector('.mcp-snippet');
+            if (!snippet) return;
+            const expanded = card.getAttribute('aria-expanded') === 'true';
+            card.setAttribute('aria-expanded', String(!expanded));
+            snippet.classList.toggle('hidden');
+        });
+    });
+
+    // Copy buttons
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-copy-target');
+            const codeEl = document.getElementById(targetId);
+            if (!codeEl) return;
+            const text = codeEl.textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.textContent;
+                btn.textContent = '已複製!';
+                btn.classList.add('bg-github-green/30','text-github-green');
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.classList.remove('bg-github-green/30','text-github-green');
+                }, 1500);
+            }).catch(() => {
+                btn.textContent = '失敗';
+                setTimeout(() => btn.textContent = '一鍵複製', 1200);
+            });
+        });
+    });
+});
+</script>
 </html>
