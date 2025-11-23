@@ -24,7 +24,7 @@
 
 ### 設計理念
 
-基於 **index.html** (第 5-6 行) 的頁面標題與描述，本指南涵蓋：
+本指南涵蓋：
 
 - **學生免費申請流程**：完整的 GitHub Education 申請步驟（以 VTC 為例）
 - **Copilot 核心功能**：AI 輔助編程、模型選擇、快捷鍵操作
@@ -453,7 +453,6 @@ git push origin feature/amazing-feature
 - [Anthropic](https://www.anthropic.com/) - MCP 協議標準
 - [Tailwind CSS](https://tailwindcss.com/) - 樣式框架
 - [Lucide Icons](https://lucide.dev/) - 圖標庫
-- [VTC Hong Kong](https://www.vtc.edu.hk/) - 申請流程參考
 
 ## 📬 聯絡方式
 
