@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd vtc-benefits-app && npm run build && cp -r dist ../docs",
+  "outputDirectory": "docs",
+  "framework": "vite"
+}
